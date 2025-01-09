@@ -5,6 +5,7 @@
 package it.unipi.wined.client;
 
 import com.google.gson.Gson;
+import it.unipi.wined.client.objects.Review;
 import it.unipi.wined.client.objects.User;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -146,12 +147,15 @@ public class UserActions {
         }
     }
 
-    public static void viewUsersReviews(String username) {
+    public static void viewUsersReviewedWines() {
         String ip = WinedClient.ip;
         Gson gson = new Gson();
+        Scanner sc = new Scanner(System.in);
         try {
+            System.out.print("User to check: ");
+            String username = sc.nextLine();
             if (Access.userExists(ip, username)) {
-                URL url = new URL("http://" + ip + "/access/check-username");
+                URL url = new URL("http://" + ip + "/regular-user-act/user-reviewed-wines");
                 HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
                 urlCon.setRequestMethod("POST");
                 urlCon.setRequestProperty("Content-Type", "application/json");
@@ -160,8 +164,84 @@ public class UserActions {
                 urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String retLine = buf.readLine();
+                String[] rets = retLine.replace("Record<{w.name: \"", "").replace("\"}>", "").replace("[", "").replace("]", "").split(",");
+                for (String s : rets){
+                    System.out.println(s);
+                }
             } else {
                 System.out.println("User does not exist");
+            }
+        } catch (Exception e) {
+
+        }
+    }
+    
+    public static void viewUsersReviews() {
+        String ip = WinedClient.ip;
+        Gson gson = new Gson();
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.print("User to check: ");
+            String username = sc.nextLine();
+            if (Access.userExists(ip, username)) {
+                URL url = new URL("http://" + ip + "/regular-user-act/user-reviews");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(username);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                retLine = retLine.replace("Record<", "").replace(">", "");
+                Review[] revs = gson.fromJson(retLine, Review[].class);
+                System.out.println("\n--------" + username + "'s reviews ---------\n");
+                for(Review r : revs){
+                    System.out.println("+++" + r.wine + "+++");
+                    System.out.println("      Rating : " + r.rating);
+                    System.out.println("      Title : " + r.title);
+                    System.out.println("      Text : " + r.text);
+                    System.out.println("----------------------\n");
+                }
+                
+            } else {
+                System.out.println("User does not exist");
+            }
+        } catch (Exception e) {
+
+        }
+    }
+    
+    public static void viewWineReviews() {
+        String ip = WinedClient.ip;
+        Gson gson = new Gson();
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.print("Wine to check: ");
+            String wine = sc.nextLine();
+            if (UserActions.wineExists(ip, wine)) {
+                URL url = new URL("http://" + ip + "/regular-user-act/wine-reviews");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(wine);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                retLine = retLine.replace("Record<", "").replace(">", "");
+                Review[] revs = gson.fromJson(retLine, Review[].class);
+                System.out.println("\n--------" + wine + "'s reviews ---------\n");
+                for(Review r : revs){
+                    System.out.println("--- Review by : " + r.user + " ---");
+                    System.out.println("      Rating : " + r.rating);
+                    System.out.println("      Title : " + r.title);
+                    System.out.println("      Text : " + r.text);
+                    System.out.println("----------------------\n");
+                }
+                
+            } else {
+                System.out.println("Wine does not exist");
             }
         } catch (Exception e) {
 
