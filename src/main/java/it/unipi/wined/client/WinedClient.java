@@ -18,7 +18,7 @@ public class WinedClient {
     public static User currentUser = new User();    
     
     public static void main(String[] args) {
-        currentUser.username = "";
+        currentUser.setNickname("");
         System.out.println("Welcome to Wined - The online wine shop!");
         ip = "127.0.0.1:8080"; //default
         String connection_status = CheckConnection.checkConnection(ip);
@@ -33,7 +33,7 @@ public class WinedClient {
                 if(currentUser == null){
                     usernameString = "";
                 } else {
-                    usernameString = currentUser.username;
+                    usernameString = currentUser.getNickname();
                 }
                 System.out.print(usernameString + ">>>");
                 String[] com = input.nextLine().split(" ");

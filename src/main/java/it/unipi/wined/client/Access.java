@@ -72,7 +72,7 @@ public class Access {
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String userjson = buf.readLine();
                 System.out.println("Welcome back " + userjson + " !");
-                WinedClient.currentUser.username = userjson;
+                WinedClient.currentUser = gson.fromJson(userjson, User.class);
             } else {
                 System.err.println("User does not exist!");
             }
@@ -105,7 +105,17 @@ public class Access {
             String firstname = sc.nextLine();
             System.out.print("Lastname: ");
             String lastname = sc.nextLine();
-
+            System.out.print("E-mail: ");
+            String email = sc.nextLine();
+            System.out.print("Phone: ");
+            long phone = Long.parseLong(sc.nextLine());
+            System.out.print("Birthday (dd/mm/yyyy): ");
+            String birthday = sc.nextLine();
+            System.out.print("Gender: ");
+            String gender = sc.nextLine();
+            System.out.print("Address: ");
+            String address = sc.nextLine();
+            
             done = false;
             String password = null;
             while (!done) {
@@ -118,13 +128,14 @@ public class Access {
                     done = true;
                 }
             }
-
+            
+           
             URL url = new URL("http://" + ip + "/access/register");
             HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
             urlCon.setRequestMethod("POST");
             urlCon.setRequestProperty("Content-Type", "application/json");
             Gson gson = new Gson();
-            String inputJs = gson.toJson(new User(username, firstname, lastname, password));
+            String inputJs = gson.toJson(new User(firstname, lastname, email, phone, birthday, gender, address, username, password, User.Level.REGULAR));
             urlCon.setDoOutput(true);
             urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
             BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));

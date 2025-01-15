@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
 
+import com.google.gson.Gson;
 import it.unipi.wined.client.UserActions;
+import it.unipi.wined.client.objects.Review;
+import it.unipi.wined.client.objects.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +44,16 @@ public class ClientTests {
     //
     @Test
     public void test() {
-        UserActions.viewUsersReviewedWines();
+        System.out.println(Long.parseLong("3208963748"));
+    }
+    
+    @Test
+    public void testGsonError() {
+        Review user = new Review();
+        Gson gson = new Gson();
+        String json = "{code: 500, message: 'invalid'}";
+        System.out.println(json);
+        System.out.println(gson.fromJson(json, User.class));
+        
     }
 }

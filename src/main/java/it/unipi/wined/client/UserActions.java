@@ -59,7 +59,7 @@ public class UserActions {
 
         if (isUserLogged()) { //check user is logged
             ArrayList<String> relation = new ArrayList<>();
-            relation.add(WinedClient.currentUser.username);
+            relation.add(WinedClient.currentUser.getNickname());
             relation.add(targetUsername);
 
             try {
@@ -100,7 +100,7 @@ public class UserActions {
 
             ArrayList<String> review = new ArrayList<>();
 
-            review.add(WinedClient.currentUser.username);
+            review.add(WinedClient.currentUser.getNickname());
 
             System.out.print("Wine to review: ");
             String wine = sc.nextLine();
@@ -165,7 +165,7 @@ public class UserActions {
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String retLine = buf.readLine();
                 String[] rets = retLine.replace("Record<{w.name: \"", "").replace("\"}>", "").replace("[", "").replace("]", "").split(",");
-                for (String s : rets){
+                for (String s : rets) {
                     System.out.println(s);
                 }
             } else {
@@ -175,7 +175,7 @@ public class UserActions {
 
         }
     }
-    
+
     public static void viewUsersReviews() {
         String ip = WinedClient.ip;
         Gson gson = new Gson();
@@ -196,14 +196,14 @@ public class UserActions {
                 retLine = retLine.replace("Record<", "").replace(">", "");
                 Review[] revs = gson.fromJson(retLine, Review[].class);
                 System.out.println("\n--------" + username + "'s reviews ---------\n");
-                for(Review r : revs){
+                for (Review r : revs) {
                     System.out.println("+++" + r.wine + "+++");
                     System.out.println("      Rating : " + r.rating);
                     System.out.println("      Title : " + r.title);
                     System.out.println("      Text : " + r.text);
                     System.out.println("----------------------\n");
                 }
-                
+
             } else {
                 System.out.println("User does not exist");
             }
@@ -211,7 +211,7 @@ public class UserActions {
 
         }
     }
-    
+
     public static void viewWineReviews() {
         String ip = WinedClient.ip;
         Gson gson = new Gson();
@@ -232,16 +232,55 @@ public class UserActions {
                 retLine = retLine.replace("Record<", "").replace(">", "");
                 Review[] revs = gson.fromJson(retLine, Review[].class);
                 System.out.println("\n--------" + wine + "'s reviews ---------\n");
-                for(Review r : revs){
+                for (Review r : revs) {
                     System.out.println("--- Review by : " + r.user + " ---");
                     System.out.println("      Rating : " + r.rating);
                     System.out.println("      Title : " + r.title);
                     System.out.println("      Text : " + r.text);
                     System.out.println("----------------------\n");
                 }
-                
+
             } else {
                 System.out.println("Wine does not exist");
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public static void likeWine() {
+        String ip = WinedClient.ip;
+        Gson gson = new Gson();
+        Scanner sc = new Scanner(System.in);
+        ArrayList<String> input = new ArrayList<>();
+        input.add(WinedClient.currentUser.getNickname());
+        try {
+            if (isUserLogged()) {
+                System.out.print("Wine to like: ");
+                String wine = sc.nextLine();
+                if (wineExists(ip, wine)) {
+                    input.add(wine);
+                    URL url = new URL("http://" + ip + "/regular-user-act/like-wine");
+                    HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                    urlCon.setRequestMethod("POST");
+                    urlCon.setRequestProperty("Content-Type", "application/json");
+                    String inputJs = gson.toJson(input);
+                    urlCon.setDoOutput(true);
+                    urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                    BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                    String retLine = buf.readLine();
+                    
+                    if(retLine.equals("0")){
+                        System.out.println(wine + " liked!");
+                    } else {
+                         System.out.println("An error occured!");
+                    }
+                } else {
+                    System.out.println("Wine doesn't exist!");
+
+                }
+            } else {
+                System.out.println("You are not logged in!");
             }
         } catch (Exception e) {
 

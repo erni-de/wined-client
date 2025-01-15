@@ -14,23 +14,20 @@ import java.util.TreeMap;
 public class Commands {
 
     Map<String, IService> services = new TreeMap<>();
-    
-    public static void printh(String in){
-        System.out.println(in);
-    }
 
     public Commands() {
         //services.put(/*command name here*/, new IService() {@Override public void call(Object param) {/*command here*/}});
         services.put("login", new IService() {@Override public void call(String[] param) {Access.login();}});
         services.put("register", new IService() {@Override public void call(String[] param) {Access.register();}});
-        services.put("print", new IService() {@Override public void call(String[] param) {printh(param[0]);}});
         services.put("logout", new IService() {@Override public void call(String[] param) {Access.logout();}});
         services.put("follow", new IService() {@Override public void call(String[] param) {UserActions.followUser(param[0]);}});
         services.put("review", new IService() {@Override public void call(String[] param) {UserActions.reviewWine();}});
         services.put("urevw", new IService() {@Override public void call(String[] param) {UserActions.viewUsersReviewedWines();}});
         services.put("urev", new IService() {@Override public void call(String[] param) {UserActions.viewUsersReviews();}});
         services.put("wrev", new IService() {@Override public void call(String[] param) {UserActions.viewWineReviews();}});
-        //wv - wineview -> output una scheda per il vino (maggiori info se user è premium/admin)
+        services.put("like", new IService() {@Override public void call(String[] param) {UserActions.likeWine();}});
+        
+//wv - wineview -> output una scheda per il vino (maggiori info se user è premium/admin)
     }
 }
 
