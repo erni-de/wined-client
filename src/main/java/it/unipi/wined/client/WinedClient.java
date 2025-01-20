@@ -15,10 +15,9 @@ import java.util.Scanner;
 public class WinedClient {
     
     public static String ip;
-    public static User currentUser = new User();    
+    public static User currentUser;  
     
     public static void main(String[] args) {
-        currentUser.setNickname("");
         System.out.println("Welcome to Wined - The online wine shop!");
         ip = "127.0.0.1:8080"; //default
         String connection_status = CheckConnection.checkConnection(ip);

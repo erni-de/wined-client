@@ -71,8 +71,8 @@ public class Access {
                 urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String userjson = buf.readLine();
-                System.out.println("Welcome back " + userjson + " !");
                 WinedClient.currentUser = gson.fromJson(userjson, User.class);
+                System.out.println("Welcome back " + WinedClient.currentUser.getNickname() + " !");
             } else {
                 System.err.println("User does not exist!");
             }
@@ -141,7 +141,7 @@ public class Access {
             BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
             String serverResponse = buf.readLine();
 
-            if (serverResponse.equals("0")) {
+            if (serverResponse.equals("200")) {
                 System.out.println("User created succesfully!");
                 System.out.println("You can login using your credentials using the 'login' command");
             } else {

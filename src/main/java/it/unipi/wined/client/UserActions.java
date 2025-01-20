@@ -52,19 +52,20 @@ public class UserActions {
         }
     }
 
-    public static void followUser(String targetUsername) {
+    public static void followUser() {
 
         String ip = WinedClient.ip;
         Gson gson = new Gson();
+        Scanner sc = new Scanner(System.in);
 
         if (isUserLogged()) { //check user is logged
             ArrayList<String> relation = new ArrayList<>();
             relation.add(WinedClient.currentUser.getNickname());
-            relation.add(targetUsername);
-
+            System.out.print("User to follow : ");
+            String targetUsername = sc.nextLine();
             try {
-
                 if (Access.userExists(ip, targetUsername)) {
+                    relation.add(targetUsername);
                     //perform follow
                     URL url = new URL("http://" + ip + "/regular-user-act/follow");
                     HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
@@ -269,11 +270,11 @@ public class UserActions {
                     urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
                     BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                     String retLine = buf.readLine();
-                    
-                    if(retLine.equals("0")){
+
+                    if (retLine.equals("0")) {
                         System.out.println(wine + " liked!");
                     } else {
-                         System.out.println("An error occured!");
+                        System.out.println("An error occured!");
                     }
                 } else {
                     System.out.println("Wine doesn't exist!");
@@ -285,5 +286,36 @@ public class UserActions {
         } catch (Exception e) {
 
         }
+    }
+
+    public static void getSuggestedWines() {
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        try {
+            if (isUserLogged()) {
+                URL url = new URL("http://" + ip + "/regular-user-act/get-suggested-by-followers");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(WinedClient.currentUser);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                if (!retLine.equals("500")) {
+                    String[] results = gson.fromJson(retLine, String[].class);
+                    for (String s : results){
+                        System.out.println("---------------");
+                        System.out.println("   " + s);
+                        System.out.println("---------------");
+                    }
+                } else {
+                    System.out.println("Server error! ");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Some error occurred! ");
+        }
+
     }
 }

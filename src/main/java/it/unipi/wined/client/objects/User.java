@@ -25,10 +25,6 @@ public class User {
     private String password;    
 
 
-    public User(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     
     //Un solo sistema di pagamento
     private PaymentInfo payment;

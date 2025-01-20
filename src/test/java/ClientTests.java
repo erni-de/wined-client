@@ -44,7 +44,8 @@ public class ClientTests {
     //
     @Test
     public void test() {
-        System.out.println(Long.parseLong("3208963748"));
+        User currentUser = new User();   
+        System.out.println(currentUser.getNickname() != null);
     }
     
     @Test
