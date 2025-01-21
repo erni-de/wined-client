@@ -118,7 +118,7 @@ public class HighActions {
             adduser.setNickname(username);
             input.add(adduser);
             try {
-                URL url = new URL("http://" + ip + "/admin-act/update-to.premium");
+                URL url = new URL("http://" + ip + "/admin-act/update-to-premium");
                 HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
                 urlCon.setRequestMethod("POST");
                 urlCon.setRequestProperty("Content-Type", "application/json");
@@ -129,7 +129,7 @@ public class HighActions {
                 String retLine = buf.readLine();
                 
                 if (retLine.equals("200")){
-                    System.out.println("User deleted succesfully!");
+                    System.out.println("User upgraded succesfully!");
                 } 
                 if (retLine.equals("503")){
                     System.out.println("Attempting unauthorized action!");

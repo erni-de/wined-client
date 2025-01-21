@@ -194,14 +194,13 @@ public class UserActions {
                 urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String retLine = buf.readLine();
-                retLine = retLine.replace("Record<", "").replace(">", "");
                 Review[] revs = gson.fromJson(retLine, Review[].class);
                 System.out.println("\n--------" + username + "'s reviews ---------\n");
                 for (Review r : revs) {
                     System.out.println("+++" + r.wine + "+++");
                     System.out.println("      Rating : " + r.rating);
                     System.out.println("      Title : " + r.title);
-                    System.out.println("      Text : " + r.text);
+                    System.out.println("      Text : " + r.body);
                     System.out.println("----------------------\n");
                 }
 
@@ -230,14 +229,13 @@ public class UserActions {
                 urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String retLine = buf.readLine();
-                retLine = retLine.replace("Record<", "").replace(">", "");
                 Review[] revs = gson.fromJson(retLine, Review[].class);
                 System.out.println("\n--------" + wine + "'s reviews ---------\n");
                 for (Review r : revs) {
                     System.out.println("--- Review by : " + r.user + " ---");
                     System.out.println("      Rating : " + r.rating);
                     System.out.println("      Title : " + r.title);
-                    System.out.println("      Text : " + r.text);
+                    System.out.println("      Text : " + r.body);
                     System.out.println("----------------------\n");
                 }
 

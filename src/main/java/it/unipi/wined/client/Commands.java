@@ -30,6 +30,10 @@ public class Commands {
 
         //ADMIN
         services.put("deluser", new IService() {@Override public void call(String[] param) {HighActions.deleteUser();}});
+        services.put("makeadmin", new IService() {@Override public void call(String[] param) {HighActions.updateUserToAdmin();}});
+        services.put("makepremium", new IService() {@Override public void call(String[] param) {HighActions.updateUserToPremium();}});
+
+                
         
 
         
