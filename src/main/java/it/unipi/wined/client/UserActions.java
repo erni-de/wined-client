@@ -7,6 +7,8 @@ package it.unipi.wined.client;
 import com.google.gson.Gson;
 import it.unipi.wined.client.objects.Review;
 import it.unipi.wined.client.objects.User;
+import it.unipi.wined.client.objects.Wine_WineMag;
+import it.unipi.wined.client.objects.Wine_WineVivino;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -302,7 +304,7 @@ public class UserActions {
                 String retLine = buf.readLine();
                 if (!retLine.equals("500")) {
                     String[] results = gson.fromJson(retLine, String[].class);
-                    for (String s : results){
+                    for (String s : results) {
                         System.out.println("---------------");
                         System.out.println("   " + s);
                         System.out.println("---------------");
@@ -310,10 +312,55 @@ public class UserActions {
                 } else {
                     System.out.println("Server error! ");
                 }
+            } else {
+                System.out.println("You have to login!");
             }
         } catch (Exception e) {
             System.out.println("Some error occurred! ");
         }
 
+    }
+
+    public static void getWineResume() {
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        Scanner sc = new Scanner(System.in);
+        try {
+            if (isUserLogged()) {
+                System.out.print("Wine to check: ");
+                String wine = sc.nextLine();
+                ArrayList<Object> input = new ArrayList<>();
+                input.add(WinedClient.currentUser);
+                input.add(wine);
+                
+                URL url = new URL("http://" + ip + "/regular-user-act/get-wine");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(input);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                System.out.println(retLine);
+                
+                if(WinedClient.currentUser.getUser_level() == User.Level.PREMIUM || WinedClient.currentUser.getUser_level() == User.Level.ADMIN){
+                    Wine_WineVivino[] wines = gson.fromJson(retLine, Wine_WineVivino[].class);
+                    for (Wine_WineVivino w : wines){
+                        w.printWine();
+                    }
+                } else {
+                    Wine_WineMag[] wines = gson.fromJson(retLine, Wine_WineMag[].class);
+                    for (Wine_WineMag w : wines){
+                        w.printWine();
+                    }
+                }
+                
+            } else {
+                System.out.println("You have to login!");
+            }
+        } catch (Exception e) {
+
+        }
     }
 }
