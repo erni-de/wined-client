@@ -22,6 +22,9 @@ public class OrderList {
     private double price;
     private int wine_number;
     
+    public OrderList() {
+    }
+    
     //Costruttore principale ne abbiamo solo uno in questo caso
     //(Non quello vuoto per Jackson qui non si usa)
     private OrderList(String wine_id, String wine_name, double price, int wine_number){

@@ -73,7 +73,7 @@ public class Wine_WineMag extends AbstractWine {
         System.out.println("\n Produced By : " + winery_name);
         System.out.println("\n Geographical Info \n     " + country + "  |  " + region + "  |  " + provenance);
         System.out.println("----------------------------------------");
-        System.out.println(" Description : \n    " + description);
+        System.out.println("          Description : \n" + description);
         System.out.println("----------------------------------------");
     }
 }

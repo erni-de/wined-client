@@ -4,6 +4,7 @@
  */
 package it.unipi.wined.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unipi.wined.client.objects.LoginRequest;
 import com.google.gson.Gson;
 import it.unipi.wined.client.objects.User;
@@ -49,6 +50,8 @@ public class Access {
     public static void login() {
         String ip = WinedClient.ip;
         Gson gson = new Gson();
+        ObjectMapper mapper = new ObjectMapper();
+
         try {
             Scanner sc = new Scanner(System.in);
             System.out.print("username: ");
@@ -71,7 +74,7 @@ public class Access {
                 urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
                 BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
                 String userjson = buf.readLine();
-                WinedClient.currentUser = gson.fromJson(userjson, User.class);
+                WinedClient.currentUser = mapper.readValue(userjson, User.class);
                 System.out.println("Welcome back " + WinedClient.currentUser.getNickname() + " !");
             } else {
                 System.err.println("User does not exist!");

@@ -4,6 +4,7 @@
  */
 
 package it.unipi.wined.client.objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 /**
@@ -14,12 +15,15 @@ import java.util.ArrayList;
 //An order is implemented as an array of order_list, so in each order we have an
 //Array of order_list that specifies the wine bought, the quantity and the price
 public class Order {
-    private int id_order;
+    @JsonProperty("id_order")
+    private String id_order;
+    @JsonProperty("orderList")
     private ArrayList<OrderList> orderList;
+    @JsonProperty("confirmation_date")
     private String confirmation_date;
-    private String departure_date;
+    @JsonProperty("delivery_date")
     private String delivery_date;
-    private double feedback;
+    @JsonProperty("order_total_cost")
     private double order_total_cost;
     
     //---------------
@@ -34,7 +38,7 @@ public class Order {
     }
     
     //Main constructor. The assumption is 
-    public Order(int id_order, ArrayList<OrderList> orderList, String confirmation_date,
+    public Order(String id_order, ArrayList<OrderList> orderList, String confirmation_date,
                 String departure_date, String delivery_date, double feedback,
                 double order_total_cost){
         
@@ -44,19 +48,13 @@ public class Order {
         this.id_order = id_order;
         this.orderList = orderList;
         this.confirmation_date = confirmation_date;
-        this.departure_date = departure_date;
         this.delivery_date = delivery_date;
-        this.feedback = feedback;
         this.order_total_cost = order_total_cost;
     }
     
     //---------------
     //---GET METHOD--
     //---------------
-    
-    public int getIdOrder(){
-        return id_order;
-    }
     
     public ArrayList<OrderList> getOrderElements(){
         return orderList;
@@ -66,16 +64,8 @@ public class Order {
         return confirmation_date;
     }
     
-    public String getDepartureDate(){
-        return departure_date;
-    }
-    
     public String getDeliveryDate(){
         return delivery_date;
-    }
-    
-    public double getFeedback(){
-        return feedback;
     }
     
     public double getOrderTotalCost(){
@@ -85,11 +75,7 @@ public class Order {
     //---------------
     //---SET METHOD--
     //---------------
-    
-    public void setIdOrder(int id_order){
-        this.id_order = id_order;
-    }
-    
+
     public void setOrderElements(OrderList orderlist){
         this.orderList.add(orderlist);
     }
@@ -97,19 +83,11 @@ public class Order {
     public void setConfirmationDate(String confirmation_date){
         this.confirmation_date = confirmation_date;
     }
-    
-    public void setDepartureDate(String departure_date){
-        this.departure_date = departure_date;
-    }
-    
+
     public void setDeliveryDate(String delivery_date){
         this.delivery_date = delivery_date;
     }
-    
-    public void setFeedback(double feedback){
-        this.feedback = feedback;
-    }
-    
+  
     public void setOrderTotalCost(double order_total_cost){
         this.order_total_cost = order_total_cost;
     }
@@ -120,9 +98,7 @@ public class Order {
                 "id_order=" + id_order +
                 ", orderList=" + orderList +
                 ", confirmation_date='" + confirmation_date + '\'' +
-                ", departure_date='" + departure_date + '\'' +
                 ", delivery_date='" + delivery_date + '\'' +
-                ", feedback=" + feedback +
                 ", order_total_cost=" + order_total_cost +
                 '}';
     }
