@@ -271,8 +271,8 @@ public class Wine_WineVivino extends AbstractWine {
     public void printWine() {
         System.out.println("\n----------------------------------------");
         System.out.println(" " + name + "  |  " + variety + "  |  Vol." + alcohol_percentage + "%  |  " + price + "$ ");
-        System.out.println("\n Produced By : " + winery_name);
-        System.out.println(" Geographical Info \n     " + country + "  |  " + region + "  |  " + provenance);
+        System.out.println("\n" + winery_name);
+        System.out.println("\n     " + country + "  |  " + region + "  |  " + provenance);
         System.out.println("----------------------------------------");
         System.out.println(" Description : \n    " + description);
         System.out.println("----------------------------------------");

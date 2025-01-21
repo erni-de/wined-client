@@ -28,7 +28,9 @@ public class Commands {
         services.put("like", new IService() {@Override public void call(String[] param) {UserActions.likeWine();}});
         services.put("suggestme", new IService() {@Override public void call(String[] param) {UserActions.getSuggestedWines();}});
         services.put("resume", new IService() {@Override public void call(String[] param) {UserActions.getWineResume();}});
+        services.put("winery", new IService() {@Override public void call(String[] param) {UserActions.getByWinery();}});
 
+        
         //ADMIN
         services.put("deluser", new IService() {@Override public void call(String[] param) {HighActions.deleteUser();}});
         services.put("makeadmin", new IService() {@Override public void call(String[] param) {HighActions.updateUserToAdmin();}});
