@@ -16,6 +16,9 @@ public class Commands {
     Map<String, IService> services = new TreeMap<>();
 
     public Commands() {
+        
+        services.put("help", new IService() {@Override public void call(String[] param) {/**/}});
+
         //services.put(/*command name here*/, new IService() {@Override public void call(Object param) {/*command here*/}});
         services.put("login", new IService() {@Override public void call(String[] param) {Access.login();}});
         services.put("register", new IService() {@Override public void call(String[] param) {Access.register();}});
@@ -34,6 +37,7 @@ public class Commands {
         services.put("mcart", new IService() {@Override public void call(String[] param) {UserActions.modifyOrder();}});
         services.put("checkout", new IService() {@Override public void call(String[] param) {UserActions.submitOrder();}});
         services.put("ohist", new IService() {@Override public void call(String[] param) {UserActions.checkOrders();}});
+        services.put("who", new IService() {@Override public void call(String[] param) {UserActions.getSuggestedUsers();}});
 
         
         //ADMIN
