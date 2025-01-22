@@ -5,6 +5,9 @@
 package it.unipi.wined.client;
 
 import com.google.gson.Gson;
+import it.unipi.wined.client.objects.AbstractWine;
+import it.unipi.wined.client.objects.Order;
+import it.unipi.wined.client.objects.OrderList;
 import it.unipi.wined.client.objects.Review;
 import it.unipi.wined.client.objects.User;
 import it.unipi.wined.client.objects.Wine_WineMag;
@@ -16,14 +19,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  *
  * @author erni
  */
 public class UserActions {
+
+    public static Order currentOrder = new Order();
 
     public static boolean isUserLogged() {
         if (WinedClient.currentUser != null) {
@@ -391,11 +398,91 @@ public class UserActions {
                     }
                 }
 
-            } else {
-                System.out.println("You have to login!");
             }
+
         } catch (Exception e) {
 
         }
     }
+
+    public static void checkCart() {
+        currentOrder.checkCart();
+    }
+
+    public static void addWineToCart() {
+        Scanner sc = new Scanner(System.in);
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        if (isUserLogged()) {
+            System.out.print("Wine to add : ");
+            String wine = sc.nextLine();
+            try {
+                if (wineExists(ip, wine)) {
+                    ArrayList<Object> input = new ArrayList<>();
+                    input.add(WinedClient.currentUser);
+                    input.add(wine);
+                    URL url = new URL("http://" + ip + "/regular-user-act/get-wine");
+                    HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                    urlCon.setRequestMethod("POST");
+                    urlCon.setRequestProperty("Content-Type", "application/json");
+                    String inputJs = gson.toJson(input);
+                    urlCon.setDoOutput(true);
+                    urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                    BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                    String retLine = buf.readLine();
+                    Wine_WineMag[] wines = gson.fromJson(retLine, Wine_WineMag[].class);
+                    currentOrder.addWine(wines[0]);
+                } else {
+                    System.out.println("Wine doesn't exist!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void modifyOrder(){
+        currentOrder.modifyCartQuantity();
+    }
+    
+    public static void submitOrder(){
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        if (isUserLogged()) {
+            try {
+                if (!currentOrder.getOrderElements().isEmpty()) {
+                    ArrayList<Object> input = new ArrayList<>();
+                    input.add(WinedClient.currentUser);
+                    input.add(currentOrder);
+                    URL url = new URL("http://" + ip + "/regular-user-act/add-order");
+                    HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                    urlCon.setRequestMethod("POST");
+                    urlCon.setRequestProperty("Content-Type", "application/json");
+                    String inputJs = gson.toJson(input);
+                    urlCon.setDoOutput(true);
+                    urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                    BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                    String retLine = buf.readLine();
+                    if (!retLine.equals("500")){
+                        WinedClient.currentUser = gson.fromJson(retLine, User.class);
+                        currentOrder = new Order();
+                    }
+                } else {
+                    System.out.println("Empty cart!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void checkOrders(){
+        if (isUserLogged()){
+            for(Order order : WinedClient.currentUser.getOrders()){
+                System.out.println("---" + order.getConfirmationDate());
+                order.checkCart();
+                }
+            }
+        }
+    
 }

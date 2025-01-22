@@ -27,7 +27,7 @@ public class OrderList {
     
     //Costruttore principale ne abbiamo solo uno in questo caso
     //(Non quello vuoto per Jackson qui non si usa)
-    private OrderList(String wine_id, String wine_name, double price, int wine_number){
+    public OrderList(String wine_id, String wine_name, double price, int wine_number){
         this.wine_id = wine_id;
         this.wine_name = wine_name;
         this.price = price;

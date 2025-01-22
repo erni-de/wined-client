@@ -2,19 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package it.unipi.wined.client.objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
  * @author nicol
  */
-
 //An order is implemented as an array of order_list, so in each order we have an
 //Array of order_list that specifies the wine bought, the quantity and the price
 public class Order {
+
     @JsonProperty("id_order")
     private String id_order;
     @JsonProperty("orderList")
@@ -25,23 +26,22 @@ public class Order {
     private String delivery_date;
     @JsonProperty("order_total_cost")
     private double order_total_cost;
-    
+
     //---------------
     //--COSTRUTTORI--
     //---------------
-    
     //Basic constructor for inizializing the order
     //I inizialize the array List for avoiding NullPointerException
-    public Order(){
+    public Order() {
         this.order_total_cost = 0;
         this.orderList = new ArrayList<>();
     }
-    
+
     //Main constructor. The assumption is 
     public Order(String id_order, ArrayList<OrderList> orderList, String confirmation_date,
-                String departure_date, String delivery_date, double feedback,
-                double order_total_cost){
-        
+            String departure_date, String delivery_date, double feedback,
+            double order_total_cost) {
+
         //I recall the empty constructor for initializing the variable
         //I only have one main constructor, an order cannot have empty fields
         this();
@@ -51,55 +51,106 @@ public class Order {
         this.delivery_date = delivery_date;
         this.order_total_cost = order_total_cost;
     }
-    
+
     //---------------
     //---GET METHOD--
     //---------------
+    public void addWine(AbstractWine wine) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Insert quantity : ");
+        int quantity = sc.nextInt();
+        boolean toAdd = true;
+        for (OrderList order : orderList) {
+            if (order.getWine_name().equals(wine.getName())) {
+                order.setWine_number(order.getWine_number() + quantity);
+                toAdd = false;
+            }
+        }
+        if (toAdd) {
+            orderList.add(new OrderList(wine.getId(), wine.getName(), (double) wine.getPrice(), quantity));
+        }
+        System.out.println("Wine " + wine.getName() + " added to cart!");
+    }
+
+    public void checkCart() {
+        double total_price = 0;
+        System.out.println("\n        WINE                 PRICE        QUANTITY ");
+        for (OrderList order : orderList) {
+            total_price = total_price + order.getPrice() * order.getWine_number();
+            System.out.println("| " + order.getWine_name() + " | " + order.getPrice() + "$ | x" + order.getWine_number() + " |");
+        }
+
+        System.out.println("#    Subtotal : " + total_price + "$\n");
+
+    }
     
-    public ArrayList<OrderList> getOrderElements(){
+    public void modifyCartQuantity(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Wine to modify quantity : ");
+        String wine = sc.nextLine();
+        for (int i = 0; i < orderList.size(); i++){
+            OrderList order = orderList.get(i);
+            if (order.getWine_name().equals(wine)){
+                System.out.print("New quantity: ");
+                order.setWine_number(sc.nextInt());
+                if (order.getWine_number() == 0){
+                    System.out.println("Wine deleted!");
+                    orderList.remove(i);
+                }
+            }
+        }  
+    }
+    
+
+    public ArrayList<OrderList> getOrderElements() {
         return orderList;
     }
-    
-    public String getConfirmationDate(){
+
+    public String getConfirmationDate() {
         return confirmation_date;
     }
-    
-    public String getDeliveryDate(){
+
+    public String getDeliveryDate() {
         return delivery_date;
     }
-    
-    public double getOrderTotalCost(){
+
+    public double getOrderTotalCost() {
         return order_total_cost;
     }
-    
+
     //---------------
     //---SET METHOD--
     //---------------
 
-    public void setOrderElements(OrderList orderlist){
-        this.orderList.add(orderlist);
+    public void setId_order(String id_order) {
+        this.id_order = id_order;
     }
     
-    public void setConfirmationDate(String confirmation_date){
+    
+    public void setOrderElements(OrderList orderlist) {
+        this.orderList.add(orderlist);
+    }
+
+    public void setConfirmationDate(String confirmation_date) {
         this.confirmation_date = confirmation_date;
     }
 
-    public void setDeliveryDate(String delivery_date){
+    public void setDeliveryDate(String delivery_date) {
         this.delivery_date = delivery_date;
     }
-  
-    public void setOrderTotalCost(double order_total_cost){
+
+    public void setOrderTotalCost(double order_total_cost) {
         this.order_total_cost = order_total_cost;
     }
-    
+
     @Override
-    public String toString(){
-        return "Order {" +
-                "id_order=" + id_order +
-                ", orderList=" + orderList +
-                ", confirmation_date='" + confirmation_date + '\'' +
-                ", delivery_date='" + delivery_date + '\'' +
-                ", order_total_cost=" + order_total_cost +
-                '}';
+    public String toString() {
+        return "Order {"
+                + "id_order=" + id_order
+                + ", orderList=" + orderList
+                + ", confirmation_date='" + confirmation_date + '\''
+                + ", delivery_date='" + delivery_date + '\''
+                + ", order_total_cost=" + order_total_cost
+                + '}';
     }
 }
