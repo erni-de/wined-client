@@ -327,6 +327,47 @@ public class UserActions {
         }
 
     }
+    
+    public static void getWinesByFilter() {
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        Scanner sc = new Scanner(System.in);
+        try {
+            if (isUserLogged()) {
+                ArrayList<Object> input = new ArrayList<>();
+                input.add(WinedClient.currentUser);
+                System.out.print("Minimum price : ");
+                input.add(sc.nextInt());
+                System.out.print("Maximum price : ");
+                input.add(sc.nextInt());
+    
+                URL url = new URL("http://" + ip + "/regular-user-act/get-by-price");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(input);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                if (!retLine.equals("500")) {
+                    String[] results = gson.fromJson(retLine, String[].class);
+                    for (String s : results) {
+                        System.out.println("---------------");
+                        System.out.println("   " + s);
+                        System.out.println("---------------");
+                    }
+                } else {
+                    System.out.println("Server error! ");
+                }
+            } else {
+                System.out.println("You have to login!");
+            }
+        } catch (Exception e) {
+            System.out.println("Some error occurred! ");
+        }
+
+    }
 
     public static void getByWinery() {
         Gson gson = new Gson();

@@ -30,6 +30,7 @@ public class Commands {
         services.put("wrev", new IService() {@Override public void call(String[] param) {UserActions.viewWineReviews();}});
         services.put("like", new IService() {@Override public void call(String[] param) {UserActions.likeWine();}});
         services.put("suggestme", new IService() {@Override public void call(String[] param) {UserActions.getSuggestedWines();}});
+        services.put("suggestp", new IService() {@Override public void call(String[] param) {UserActions.getWinesByFilter();}});
         services.put("resume", new IService() {@Override public void call(String[] param) {UserActions.getWineResume();}});
         services.put("winery", new IService() {@Override public void call(String[] param) {UserActions.getByWinery();}});
         services.put("cart", new IService() {@Override public void call(String[] param) {UserActions.checkCart();}});
