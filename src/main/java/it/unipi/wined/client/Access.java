@@ -41,7 +41,7 @@ public class Access {
             return false;
         }
     }
-    
+
     public static void logout() {
         WinedClient.currentUser = null;
         System.out.println("Bye!");
@@ -49,8 +49,9 @@ public class Access {
 
     public static void login() {
         String ip = WinedClient.ip;
-        Gson gson = new Gson();
         ObjectMapper mapper = new ObjectMapper();
+
+        Gson gson = new Gson();
 
         try {
             Scanner sc = new Scanner(System.in);
@@ -118,7 +119,7 @@ public class Access {
             String gender = sc.nextLine();
             System.out.print("Address: ");
             String address = sc.nextLine();
-            
+
             done = false;
             String password = null;
             while (!done) {
@@ -131,8 +132,7 @@ public class Access {
                     done = true;
                 }
             }
-            
-           
+
             URL url = new URL("http://" + ip + "/access/register");
             HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
             urlCon.setRequestMethod("POST");
