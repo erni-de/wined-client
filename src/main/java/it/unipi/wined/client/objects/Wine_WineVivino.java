@@ -2,9 +2,12 @@ package it.unipi.wined.client.objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import it.unipi.wined.client.UserActions;
+import it.unipi.wined.client.WinedClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Wine_WineVivino extends AbstractWine {
@@ -87,6 +90,52 @@ public class Wine_WineVivino extends AbstractWine {
     public List<Flavor> getFlavorList() {
         return flavorList;
     }
+
+    public void setWinery_id(String winery_id) {
+        this.winery_id = winery_id;
+    }
+
+    public void setWinery_name(String winery_name) {
+        this.winery_name = winery_name;
+    }
+
+    public void setAcidity(Double acidity) {
+        this.acidity = acidity;
+    }
+
+    public void setFizziness(Double fizziness) {
+        this.fizziness = fizziness;
+    }
+
+    public void setIntensity(Double intensity) {
+        this.intensity = intensity;
+    }
+
+    public void setSweetness(Double sweetness) {
+        this.sweetness = sweetness;
+    }
+
+    public void setTannin(Double tannin) {
+        this.tannin = tannin;
+    }
+
+    public void setFlavorList(List<Flavor> flavorList) {
+        this.flavorList = flavorList;
+    }
+
+    public void setBody(Integer body) {
+        this.body = body;
+    }
+
+    public void setBody_description(String body_description) {
+        this.body_description = body_description;
+    }
+
+    public void setFoodList(List<Food> foodList) {
+        this.foodList = foodList;
+    }
+    
+    
 
     @SuppressWarnings("unchecked")
     @JsonProperty("taste")
@@ -286,5 +335,76 @@ public class Wine_WineVivino extends AbstractWine {
         for (Food food : foodList) {
             System.out.println("    " + food.getName());
         }
+    }
+    
+    
+    public static Wine_WineVivino createCLI() {
+        Wine_WineVivino wine = new Wine_WineVivino();
+        Scanner sc = new Scanner(System.in);
+        while(true){
+            System.out.print("Wine name : ");
+            String winename = sc.nextLine();
+            try {
+            if(UserActions.wineExists(WinedClient.ip, winename)){
+                System.out.println("Wine name already exists!");
+            } else {
+                break;
+            }
+                } catch (Exception e) {
+                    System.out.println("Server error");
+                }
+        }
+        System.out.print("Description : ");
+        wine.setDescription(sc.nextLine());
+        System.out.print("Winery Name : ");
+        wine.setWinery_name(sc.nextLine());
+        System.out.print("Country : ");
+        wine.setCountry(sc.nextLine());
+        System.out.print("Region : ");
+        wine.setRegion(sc.nextLine());
+        wine.setProvenance("V");
+        System.out.print("Variety : ");
+        wine.setVariety(sc.nextLine());
+        System.out.print("Alcohol vol. % : ");
+        wine.setAlcohol_percentage(sc.nextInt());
+        System.out.print("Wine price[$] (int value) : ");
+        wine.setPrice(sc.nextInt());
+        System.out.print("Acidity : ");
+        wine.setAcidity(sc.nextDouble());
+        System.out.print("Fizziness : ");
+        wine.setFizziness(sc.nextDouble());
+        System.out.print("Intensity : ");
+        wine.setIntensity(sc.nextDouble());
+        System.out.print("Sweetness : ");
+        wine.setSweetness(sc.nextDouble());
+        System.out.print("Tannin : ");
+        wine.setTannin(sc.nextDouble());
+        
+        System.out.print("Set new flavors [Issue \"stop\" to stop] : ");
+        while(true){
+            System.out.print("Enter flavor : ");
+            String fl = sc.nextLine();
+            if (fl.equals("stop")){
+                break;
+            }
+            System.out.print("Enter value : ");
+            int value = sc.nextInt();
+            wine.flavorList.add(new Flavor(fl, value));
+        }
+        System.out.print("Body (int value) : ");
+        wine.setBody(sc.nextInt());
+        System.out.print("Body Description : ");
+        wine.setBody_description(sc.nextLine());
+        System.out.print("Set food pairings [Issue \"stop\" to stop] : ");
+        while(true){
+            System.out.print("Enter food : ");
+            String fl = sc.nextLine();
+            if (fl.equals("stop")){
+                break;
+            }
+            wine.foodList.add(new Food(fl));
+        }
+        System.out.println("Registration completed!");
+        return wine;
     }
 }

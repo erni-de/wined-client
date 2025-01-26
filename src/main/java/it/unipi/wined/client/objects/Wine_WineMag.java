@@ -7,7 +7,10 @@ package it.unipi.wined.client.objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import it.unipi.wined.client.UserActions;
+import it.unipi.wined.client.WinedClient;
 import java.util.Map;
+import java.util.Scanner;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Wine_WineMag extends AbstractWine {
@@ -50,6 +53,12 @@ public class Wine_WineMag extends AbstractWine {
         }
     }
 
+    public void setWinery_name(String winery_name) {
+        this.winery_name = winery_name;
+    }
+
+    
+    
     @Override
     public String toString() {
         return "Wine_WineMag{" +
@@ -75,5 +84,40 @@ public class Wine_WineMag extends AbstractWine {
         System.out.println("----------------------------------------");
         System.out.println(" Description : \n    " + description);
         System.out.println("----------------------------------------");
+    }
+    
+    public static Wine_WineMag createCLI() {
+        Wine_WineMag wine = new Wine_WineMag();
+        Scanner sc = new Scanner(System.in);
+        while(true){
+            System.out.print("Wine name : ");
+            String winename = sc.nextLine();
+            try {
+            if(UserActions.wineExists(WinedClient.ip, winename)){
+                System.out.println("Wine name already exists!");
+            } else {
+                break;
+            }
+                } catch (Exception e) {
+                    System.out.println("Server error");
+                }
+        }
+        System.out.print("Description : ");
+        wine.setDescription(sc.nextLine());
+        System.out.print("Winery Name : ");
+        wine.setWinery_name(sc.nextLine());
+        System.out.print("Country : ");
+        wine.setCountry(sc.nextLine());
+        System.out.print("Region : ");
+        wine.setRegion(sc.nextLine());
+        wine.setProvenance("W");
+        System.out.print("Variety : ");
+        wine.setVariety(sc.nextLine());
+        System.out.print("Alcohol vol. % : ");
+        wine.setAlcohol_percentage(sc.nextInt());
+        System.out.print("Wine price[$] (int value) : ");
+        wine.setPrice(sc.nextInt());
+        System.out.println("Registration completed!");
+        return wine;
     }
 }

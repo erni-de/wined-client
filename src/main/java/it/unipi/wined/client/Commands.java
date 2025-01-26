@@ -39,6 +39,8 @@ public class Commands {
         services.put("checkout", new IService() {@Override public void call(String[] param) {UserActions.submitOrder();}});
         services.put("ohist", new IService() {@Override public void call(String[] param) {UserActions.checkOrders();}});
         services.put("who", new IService() {@Override public void call(String[] param) {UserActions.getSuggestedUsers();}});
+        services.put("followers", new IService() {@Override public void call(String[] param) {UserActions.getFollowers();}});
+        services.put("followed", new IService() {@Override public void call(String[] param) {UserActions.getFollowed();}});
 
         
         //ADMIN
@@ -47,12 +49,14 @@ public class Commands {
         services.put("makepremium", new IService() {@Override public void call(String[] param) {HighActions.updateUserToPremium();}});
         services.put("systats", new IService() {@Override public void call(String[] param) {HighActions.getStats();}});
         services.put("regstats", new IService() {@Override public void call(String[] param) {HighActions.consultRegion();}});
+        services.put("addv", new IService() {@Override public void call(String[] param) {HighActions.addVivinoWine();}});
+        services.put("addw", new IService() {@Override public void call(String[] param) {HighActions.addWineMagWine();}});
+        services.put("delwine", new IService() {@Override public void call(String[] param) {HighActions.deleteWine();}});
 
                 
         
 
         
-//wv - wineview -> output una scheda per il vino (maggiori info se user è premium/admin)
     }
 }
 

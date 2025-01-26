@@ -558,4 +558,69 @@ public class UserActions {
         }
 
     }
+    
+    
+    public static void getFollowers() {
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        try {
+            if (isUserLogged()) {
+                URL url = new URL("http://" + ip + "/regular-user-act/get-followers");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(WinedClient.currentUser);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                if (!retLine.equals("500")) {
+                    String[] results = gson.fromJson(retLine, String[].class);
+                    for (String s : results) {
+                        System.out.println("---------------");
+                        System.out.println("   " + s);
+                        System.out.println("---------------");
+                    }
+                } else {
+                    System.out.println("Server error! ");
+                }
+            } else {
+                System.out.println("You have to login!");
+            }
+        } catch (Exception e) {
+            System.out.println("Some error occurred! ");
+        }
+    }
+    
+    public static void getFollowed() {
+        Gson gson = new Gson();
+        String ip = WinedClient.ip;
+        try {
+            if (isUserLogged()) {
+                URL url = new URL("http://" + ip + "/regular-user-act/get-followed");
+                HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
+                urlCon.setRequestMethod("POST");
+                urlCon.setRequestProperty("Content-Type", "application/json");
+                String inputJs = gson.toJson(WinedClient.currentUser);
+                urlCon.setDoOutput(true);
+                urlCon.getOutputStream().write(inputJs.getBytes("UTF-8"));
+                BufferedReader buf = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+                String retLine = buf.readLine();
+                if (!retLine.equals("500")) {
+                    String[] results = gson.fromJson(retLine, String[].class);
+                    for (String s : results) {
+                        System.out.println("---------------");
+                        System.out.println("   " + s);
+                        System.out.println("---------------");
+                    }
+                } else {
+                    System.out.println("Server error! ");
+                }
+            } else {
+                System.out.println("You have to login!");
+            }
+        } catch (Exception e) {
+            System.out.println("Some error occurred! ");
+        }
+    }
 }
