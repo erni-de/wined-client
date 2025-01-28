@@ -343,9 +343,10 @@ public class Wine_WineVivino extends AbstractWine {
         Scanner sc = new Scanner(System.in);
         while(true){
             System.out.print("Wine name : ");
-            String winename = sc.nextLine();
+            String name = sc.nextLine();
+            wine.setName(name);
             try {
-            if(UserActions.wineExists(WinedClient.ip, winename)){
+            if(UserActions.wineExists(WinedClient.ip, name)){
                 System.out.println("Wine name already exists!");
             } else {
                 break;

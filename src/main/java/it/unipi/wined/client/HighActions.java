@@ -128,7 +128,7 @@ public class HighActions {
                 if (retLine.equals("503")){
                     System.out.println("Attempting unauthorized action!");
                 } 
-                if (retLine.equals("500") || retLine.equals("400")){
+                if (retLine.equals("500") || retLine.equals("400") || retLine.equals("401")){
                     System.out.println("Server error");
                 } 
                 

@@ -18,7 +18,13 @@ public class WinedClient {
 
     public static void main(String[] args) {
         System.out.println("Welcome to Wined - The online wine shop!");
-        ip = "localhost:8080"; //default
+        if (args.length > 0){
+        ip = args[0]; //default
+        } else {
+            ip = "localhost:8080";
+        }
+        System.out.println("Connected to " + ip);
+
         String connection_status = CheckConnection.checkConnection(ip);
         Scanner input = new Scanner(System.in);
         String usernameString;
